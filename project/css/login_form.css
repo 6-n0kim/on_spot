@@ -1,0 +1,90 @@
+body {
+  background-color: #f9f9f9;
+}
+
+.contentsWrap {
+  margin: 90px auto;
+  max-width: 340px;
+  border: none;
+  padding: 20px;
+  text-align: center;
+}
+
+.window {
+  /*폼 테두리 border*/
+  background-color: #fcfcfc;
+  padding: 10px auto;
+  border: 1px solid #dfdfdf;
+  border-radius: 10px;
+}
+
+.window * {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.window input {
+  margin-bottom: 10px;
+  background-color: #f5f5f5;
+  height: 37px;
+  box-sizing: border-box;
+  border: 1px solid #b0b0b9;
+  font-size: 12px;
+  font-weight: 300;
+  transition-property: width;
+  transition-duration: 2s;
+  border-radius: 5px;
+}
+
+.window input:focus {
+  outline: none;
+  border: 1px solid #b0b0b9;
+  width: 280px;
+}
+
+.ordinaryLogin {
+  height: 37px;
+  margin-bottom: 10px;
+  color: white;
+  background-color: #549ec0;
+  border: 1px solid #f5f5f5;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+#onSpotLogo {
+  margin: 60px auto 60px;
+  max-width: 175px;
+}
+
+/*
+.inlineToBlock {
+display: block;
+}
+*/
+
+p{
+  color: #999999;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.noneunderline {
+  text-decoration: none;
+  color: #549ec0;
+}
+
+.findidpwd {
+  margin-top: 50px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.creatAccountIcon {
+  width: 50px;
+}
