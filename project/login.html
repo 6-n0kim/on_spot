@@ -4,19 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>.</title>
+  <title>OnSpot login</title>
   <link rel="stylesheet" href="css/login_form.css">
-
+  <link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
 <body>
-
+<form action="login.jsp">
   <div class="contentsWrap">
     <div class="window">
       <img src="img/on_spot_text.png" alt="" id="onSpotLogo">
-      <input type="text" placeholder="이메일" class="inlineToBlock">
-      <input type="password" placeholder="비밀번호" class="inlineToBlock">
-      <button class="inlineToBlock ordinaryLogin unactivatedLoginColor">로그인</button>
+      <input type="text" placeholder="이메일" class="inlineToBlock box" required>
+      <input type="password" placeholder="비밀번호" class="inlineToBlock box" required>
+      <button class="btn btn-outline-primary" type="submit">로그인</button>
       <hr>
       <p>계정을 잊으셨다면?</p>
       <div>
@@ -28,13 +29,11 @@
       <div>
         <p>계정이 없으신가요?</p>
       </div>
-      <a href="#" class="noneunderline">
+      <a href="createAccount.html" class="noneunderline">
         <img src="img/register_login_signup.png" class="creatAccountIcon"><br>가입하기</a>
-
     </div>
   </div>
-
+</form>
   <script src="script/in.js"></script>
 </body>
-
 </html>
