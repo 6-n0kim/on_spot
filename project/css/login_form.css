@@ -10,22 +10,34 @@ body {
   text-align: center;
 }
 
+.contentsWrap1{
+  margin: 90px auto;
+  max-width: 340px;
+  border: none;
+  padding: 20px;
+}
+
 .window {
-  /*폼 테두리 border*/
   background-color: #fcfcfc;
   padding: 10px auto;
   border: 1px solid #dfdfdf;
   border-radius: 10px;
 }
 
+.window img {
+  background-color: #fcfcfc;
+  padding: 10px auto;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+}  
 .window * {
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 }
 
-
-.window input {
+.box {
   margin-bottom: 10px;
   background-color: #f5f5f5;
   height: 37px;
@@ -33,15 +45,11 @@ body {
   border: 1px solid #b0b0b9;
   font-size: 12px;
   font-weight: 300;
-  transition-property: width;
-  transition-duration: 2s;
   border-radius: 5px;
 }
 
-.window input:focus {
+.box:focus {
   outline: none;
-  border: 1px solid #b0b0b9;
-  width: 280px;
 }
 
 .ordinaryLogin {
@@ -59,18 +67,18 @@ body {
   max-width: 175px;
 }
 
-/*
+
 .inlineToBlock {
 display: block;
 }
-*/
 
-p{
+.p{
   color: #999999;
   font-size: 12px;
   font-weight: 700;
   opacity: 0.8;
 }
+
 
 .noneunderline {
   text-decoration: none;
