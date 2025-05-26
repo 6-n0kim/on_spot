@@ -34,6 +34,7 @@ dao.close();
   <title>게시물 페이지</title>
   <link rel="stylesheet" href="css/login_form.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/common.css">
   <script src="https://kit.fontawesome.com/3004eb4abf.js" crossorigin="anonymous"></script>
   <style>
   
@@ -228,6 +229,7 @@ a.prof {
       <!-- <div style="visibility: visible;opacity: 1;display:fixed"> -->
     </section>
   </div>
+ <script src="js/common.js"></script>
  <script>
   	  //작성자가 맞으면 block 아니면 none
   	    if('<%=session.getAttribute("user_id")%>' != '<%=dto.getUser_id()%>'){		

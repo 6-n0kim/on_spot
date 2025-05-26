@@ -1,6 +1,9 @@
 package post;
 
-public class postDTO {
+/**
+ * 게시물 정보를 담는 DTO 클래스
+ */
+public class PostDTO {
 
 	private String post_id;
 	private String content;

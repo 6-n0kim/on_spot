@@ -5,50 +5,55 @@ import java.util.List;
 import java.util.Map;
 import db.DBConnPool;
 
-public class postDAO extends DBConnPool {
-	public postDAO() {
+public class PostDAO extends DBConnPool {
+	public PostDAO() {
 		super();
 	}
 
-	// post 테이블에 새글 저장 기능
-	public int insertWrite(postDTO dto) {
+	/**
+	 * 새로운 게시글을 저장합니다.
+	 * @param dto 저장할 게시글 정보
+	 * @return 저장 성공 여부 (1: 성공, 0: 실패)
+	 */
+	public int insertWrite(PostDTO dto) {
 		int result = 0;
+		String query = "INSERT INTO post(post_id, content, location, likecount, user_id, post_file) " +
+					  "VALUES(seq_post_post_id.NEXTVAL, ?, ?, 0, ?, ?)";
 
 		try {
-			String query = "INSERT INTO post(post_id , content , location , likecount, user_id , post_file) "
-					+ "VALUES(" + "seq_post_post_id.NEXTVAL, ?, ?, 0, ?, ?)";
-
 			psmt = con.prepareStatement(query);
 			psmt.setString(1, dto.getContent());
 			psmt.setString(2, dto.getLocation());
 			psmt.setString(3, dto.getUser_id());
 			psmt.setString(4, dto.getPost_file());
-
-			result = psmt.executeUpdate(); // 동적쿼리 실행
-
+			result = psmt.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("새글 저장 중 오류 발생");
+			System.err.println("게시글 저장 중 오류 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return result; // 결과값 처리
+		return result;
 	}
 
-	// 검색조건에 맞는 게시물 목록을 반환하는 selectList(Map<String,Object> map)
-	public List<postDTO> selectList(Map<String, Object> map) {
-		List<postDTO> bbs = new ArrayList<postDTO>();
-		String query = "SELECT * FROM post ";
+	/**
+	 * 검색 조건에 맞는 게시물 목록을 반환합니다.
+	 * @param map 검색 조건을 담은 Map
+	 * @return 게시물 목록
+	 */
+	public List<PostDTO> selectList(Map<String, Object> map) {
+		List<PostDTO> posts = new ArrayList<>();
+		StringBuilder query = new StringBuilder("SELECT * FROM post ");
+		
 		if (map.get("searchWord") != null) {
-			query += " WHERE location LIKE '%" + map.get("searchWord") + "%' ";
+			query.append("WHERE location LIKE '%").append(map.get("searchWord")).append("%' ");
 		}
-		query += "ORDER BY postdate ASC ";
+		query.append("ORDER BY postdate ASC");
 
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
+			rs = stmt.executeQuery(query.toString());
 
 			while (rs.next()) {
-				postDTO dto = new postDTO();
-
+				PostDTO dto = new PostDTO();
 				dto.setPost_id(rs.getString("post_id")); 
 				dto.setContent(rs.getString("content")); 
 				dto.setLocation(rs.getString("location"));
@@ -56,33 +61,33 @@ public class postDAO extends DBConnPool {
 				dto.setUser_id(rs.getString("user_id"));
 				dto.setPostdate(rs.getString("postdate"));
 				dto.setPost_file(rs.getString("post_file"));
-				bbs.add(dto); // 결과 목록에 저장
+				posts.add(dto);
 			}
-
 		} catch (Exception e) {
-			System.out.println("게시물 조회 중 예외 발생");
+			System.err.println("게시물 조회 중 예외 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
-
-		return bbs;
+		return posts;
 	}
-	//게시물 뷰
-	 public postDTO postView(String post_id) {
-		  postDTO dto = new postDTO();
-		  
-		  //쿼리문 작성 
-		  String query = "SELECT P.*, U.nickname , U.profile_image "
-				         + " FROM TB_USER U INNER JOIN post P "
-				         + " ON U.user_id=P.user_id "
-				         + " WHERE post_id=?";
-		  
-		  try {
+
+	/**
+	 * 특정 게시물의 상세 정보를 조회합니다.
+	 * @param post_id 게시물 ID
+	 * @return 게시물 정보
+	 */
+	public PostDTO postView(String post_id) {
+		PostDTO dto = new PostDTO();
+		String query = "SELECT P.*, U.nickname, U.profile_image " +
+					  "FROM TB_USER U INNER JOIN post P " +
+					  "ON U.user_id = P.user_id " +
+					  "WHERE post_id = ?";
+		
+		try {
 			psmt = con.prepareStatement(query);
 			psmt.setString(1, post_id);
 			rs = psmt.executeQuery();
 			
-			//결과처리
-			if(rs.next()) {
+			if (rs.next()) {
 				dto.setPost_id(rs.getString("post_id")); 
 				dto.setContent(rs.getString("content")); 
 				dto.setLocation(rs.getString("location"));
@@ -93,56 +98,52 @@ public class postDAO extends DBConnPool {
 				dto.setNickname(rs.getString("nickname"));
 				dto.setProfile_image(rs.getString("profile_image"));
 			}
-					
 		} catch (Exception e) {
-			System.out.println("게시물 보기 중 예외 발생");
+			System.err.println("게시물 조회 중 예외 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
-		 
-		 return dto;
-	 }
-	
-	 public int deletePost(postDTO dto) {
-		 int result = 0;
-		 
-		 try {
-			 //쿼리문 템플릿 
-			 String query = "DELETE FROM post WHERE post_id=?";
-					       
-			 //쿼리문 완성
-			 psmt = con.prepareStatement(query);
-			 psmt.setString(1,dto.getPost_id());
-			 
-			 result = psmt.executeUpdate();
-			 
-		} catch (Exception e) {
-			System.out.println("게시물 삭제 중 예외 발생");
-			e.printStackTrace();
-		}
-		 //결과값 반환
-		 return result;
-	 }
-	 
-	 public int editPost(postDTO dto) {
-		 int result =0;
+		return dto;
+	}
+
+	/**
+	 * 게시물을 삭제합니다.
+	 * @param dto 삭제할 게시물 정보
+	 * @return 삭제 성공 여부 (1: 성공, 0: 실패)
+	 */
+	public int deletePost(PostDTO dto) {
+		int result = 0;
+		String query = "DELETE FROM post WHERE post_id = ?";
 		
-		 try {
-			String query = "UPDATE post SET location = ? , content= ? WHERE post_id = ?";
-			
+		try {
 			psmt = con.prepareStatement(query);
-			
-			psmt.setString(1,dto.getLocation());
-			psmt.setString(2,dto.getContent());
-			psmt.setString(3, dto.getPost_id());
-			
+			psmt.setString(1, dto.getPost_id());
 			result = psmt.executeUpdate();
-			
 		} catch (Exception e) {
-			System.out.println("게시물 수정 중 오류 발생");
+			System.err.println("게시물 삭제 중 예외 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
-				 
 		return result;
-	 }
-	 
+	}
+
+	/**
+	 * 게시물을 수정합니다.
+	 * @param dto 수정할 게시물 정보
+	 * @return 수정 성공 여부 (1: 성공, 0: 실패)
+	 */
+	public int editPost(PostDTO dto) {
+		int result = 0;
+		String query = "UPDATE post SET location = ?, content = ? WHERE post_id = ?";
+		
+		try {
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, dto.getLocation());
+			psmt.setString(2, dto.getContent());
+			psmt.setString(3, dto.getPost_id());
+			result = psmt.executeUpdate();
+		} catch (Exception e) {
+			System.err.println("게시물 수정 중 오류 발생: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
