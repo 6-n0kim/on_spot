@@ -1,7 +1,6 @@
 # 📍 On Spot — 위치 기반 소셜 미디어 플랫폼
 
-**위치 기반 소셜 미디어 플랫폼**의 웹 애플리케이션입니다.  
-내 주변의 경험을 공유하고, 지도 위에서 새로운 사람들의 이야기를 발견하는 공간
+> **내 주변의 경험을 공유하고, 지도 위에서 새로운 사람들의 이야기를 발견하는 공간**
 
 ---
 
@@ -10,43 +9,27 @@
 | 항목           | 내용                                                                                |
 | -------------- | ----------------------------------------------------------------------------------- |
 | **프로젝트명** | On Spot                                                                             |
-| **기간**       | 2022.07 – 2022.09 (약 3개월)                                                        |
-| **팀 규모**    | 1인                                                                                 |
-| **담당 역할**  | **전체 업무 담당**                                                                  |
+| **기간**       | 2024.07 – 2024.10 (약 3개월)                                                        |
+| **팀 규모**    | 3인 (기획 1 / 백엔드 1 / 프론트엔드 1)                                              |
+| **담당 역할**  | **백엔드 개발 및 시스템 설계 전담** — DB 설계, API 개발, 지도 연동, 보안 개선 담당  |
 | **목표**       | “위치 기반 SNS”로 사용자가 실제 장소에서 경험을 공유하고 소통할 수 있는 플랫폼 구축 |
 
 ---
 
 ## 🧩 문제 정의
 
-기존 SNS에서는 게시물이 시간순으로만 정렬되어 **“지금 이 장소 주변에서 무슨 일이 있는가”**를 알기 어려움.
-이를 해결하기 위해 위치 데이터를 중심으로 콘텐츠를 탐색할 수 있는 플랫폼을 설계했습니다.
+기존 SNS에서는 게시물이 시간순으로만 정렬되어 **“지금 이 장소 주변에서 무슨 일이 있는가”**를 알기 어려움.  
+이를 해결하기 위해 **위치 데이터를 중심으로 콘텐츠를 탐색할 수 있는 플랫폼**을 설계하였다.
 
-해결 방향
+**해결 방향**
 
-게시물에 위치 정보와 좌표를 결합 → 지도 기반 탐색
-
-Kakao Map SDK로 실제 장소 중심의 UI 제공
-
-Oracle 기반 데이터 구조로 다중 사용자 요청 처리 안정화
+- 게시물에 위치 정보와 좌표를 결합 → 지도 기반 탐색
+- Kakao Map SDK로 실제 장소 중심의 UI 제공
+- Oracle 기반 데이터 구조로 다중 사용자 요청 처리 안정화
 
 ---
 
-## 🚀 주요 기능
-
-- 🔐 **회원 관리** – 회원가입, 로그인, 아이디/비밀번호 찾기, 마이페이지
-- 📝 **게시물 기능** – 위치 기반 게시물 작성, 조회, 수정, 삭제
-  - 게시물 작성 (이미지 업로드, 위치 정보)
-  - 최신순/인기순/팔로우 게시물 조회
-  - 위치 기반 게시물 검색
-- 💬 **댓글 시스템** – 게시물별 댓글 작성 및 조회
-- 🗺️ **지도 기능** – Kakao Map SDK 기반 지도 탐색 및 마커 표시
-- 👥 **소셜 기능** – 사용자 검색, 팔로우, 좋아요 (UI 구현)
-- 📸 **이미지 관리** – 프로필 이미지 및 게시물 이미지 업로드
-
----
-
-## ⚙️ 기술 스택
+## ⚙️ 기술 스택 및 선택 이유
 
 | 구분                | 기술                                    | 선택 이유                                             |
 | ------------------- | --------------------------------------- | ----------------------------------------------------- |
@@ -56,63 +39,80 @@ Oracle 기반 데이터 구조로 다중 사용자 요청 처리 안정화
 | **Map API**         | **Kakao Maps SDK**                      | 한국 사용자 친화적 지도 API, 마커 이벤트 처리 용이    |
 | **File Upload**     | **COS (Multipart)**                     | 이미지 파일 업로드 처리 간결                          |
 | **Server**          | **Apache Tomcat 8.5**                   | JSP 호환성 및 배포 편의성                             |
-| **Version Control** | GitHub                                  | 협업 및 변경 이력 관리                                |
-| **IDE**             | Eclipse                                 | Java Web 환경 통합                                    |
+| **Version Control** | **GitHub**                              | 협업 및 변경 이력 관리                                |
+| **IDE**             | **Eclipse**                             | Java Web 환경 통합                                    |
+
+---
+
+## 🧠 시스템 아키텍처
+
+```text
+[사용자]
+   ↓ 요청 (HTTP)
+[Front-End JSP/JS]
+   ↓
+[Controller - Servlet]
+   ↓
+[Service Layer - DAO/DTO]
+   ↓
+[DB Connection Pool - Oracle]
 
 ---
 
 ## 📁 프로젝트 구조
 
 ```
+
 project/
 ├─ src/
-│  └─ main/
-│     ├─ java/                       # Java 소스 코드
-│     │  ├─ db/                      # 데이터베이스 연결
-│     │  │  ├─ DBConnPool.java       # 커넥션 풀 관리
-│     │  │  └─ JDBConnect.java       # JDBC 직접 연결
-│     │  ├─ membership/              # 회원 관리
-│     │  │  ├─ MemberDTO.java        # 회원 데이터 전송 객체
-│     │  │  └─ MemberDAO.java        # 회원 데이터 접근 객체
-│     │  ├─ post/                    # 게시물 관리
-│     │  │  ├─ PostDTO.java          # 게시물 데이터 전송 객체
-│     │  │  └─ PostDAO.java          # 게시물 데이터 접근 객체
-│     │  └─ comment/                 # 댓글 관리
-│     │     ├─ CommentDTO.java       # 댓글 데이터 전송 객체
-│     │     └─ CommentDAO.java       # 댓글 데이터 접근 객체
-│     └─ webapp/                     # 웹 리소스
-│        ├─ css/                     # 스타일시트
-│        │  ├─ common.css            # 공통 스타일
-│        │  ├─ header.css            # 헤더 스타일
-│        │  └─ login_form.css        # 로그인 폼 스타일
-│        ├─ js/                      # JavaScript 파일
-│        │  └─ common.js             # 공통 JavaScript
-│        ├─ img/                     # 이미지 리소스
-│        │  ├─ on_spot_logo_final.png
-│        │  ├─ on_spot_text.png
-│        │  └─ ...
-│        ├─ Uploads/                 # 업로드된 파일 저장
-│        ├─ WEB-INF/                 # 웹 설정
-│        │  ├─ lib/                  # 라이브러리
-│        │  │  ├─ cos.jar            # 파일 업로드
-│        │  │  └─ ojdbc6.jar         # Oracle JDBC 드라이버
-│        │  └─ web.xml               # 웹 애플리케이션 설정
-│        ├─ main.jsp                 # 메인 페이지 (지도)
-│        ├─ login.jsp                # 로그인 페이지
-│        ├─ sign_up.jsp              # 회원가입 페이지
-│        ├─ header.jsp               # 헤더 컴포넌트
-│        ├─ post.jsp                 # 게시물 상세 페이지
-│        ├─ createpost.jsp           # 게시물 작성 페이지
-│        ├─ post_recent.jsp          # 최신 게시물 목록
-│        ├─ post_rank.jsp            # 인기 게시물 목록
-│        ├─ post_fol.jsp             # 팔로우 게시물 목록
-│        ├─ mypage.jsp               # 마이페이지
-│        ├─ search_post.jsp          # 게시물 검색
-│        ├─ search_user.jsp          # 사용자 검색
-│        └─ ...                      # 기타 JSP 페이지
+│ └─ main/
+│ ├─ java/ # Java 소스 코드
+│ │ ├─ db/ # 데이터베이스 연결
+│ │ │ ├─ DBConnPool.java # 커넥션 풀 관리
+│ │ │ └─ JDBConnect.java # JDBC 직접 연결
+│ │ ├─ membership/ # 회원 관리
+│ │ │ ├─ MemberDTO.java # 회원 데이터 전송 객체
+│ │ │ └─ MemberDAO.java # 회원 데이터 접근 객체
+│ │ ├─ post/ # 게시물 관리
+│ │ │ ├─ PostDTO.java # 게시물 데이터 전송 객체
+│ │ │ └─ PostDAO.java # 게시물 데이터 접근 객체
+│ │ └─ comment/ # 댓글 관리
+│ │ ├─ CommentDTO.java # 댓글 데이터 전송 객체
+│ │ └─ CommentDAO.java # 댓글 데이터 접근 객체
+│ └─ webapp/ # 웹 리소스
+│ ├─ css/ # 스타일시트
+│ │ ├─ common.css # 공통 스타일
+│ │ ├─ header.css # 헤더 스타일
+│ │ └─ login_form.css # 로그인 폼 스타일
+│ ├─ js/ # JavaScript 파일
+│ │ └─ common.js # 공통 JavaScript
+│ ├─ img/ # 이미지 리소스
+│ │ ├─ on_spot_logo_final.png
+│ │ ├─ on_spot_text.png
+│ │ └─ ...
+│ ├─ Uploads/ # 업로드된 파일 저장
+│ ├─ WEB-INF/ # 웹 설정
+│ │ ├─ lib/ # 라이브러리
+│ │ │ ├─ cos.jar # 파일 업로드
+│ │ │ └─ ojdbc6.jar # Oracle JDBC 드라이버
+│ │ └─ web.xml # 웹 애플리케이션 설정
+│ ├─ main.jsp # 메인 페이지 (지도)
+│ ├─ login.jsp # 로그인 페이지
+│ ├─ sign_up.jsp # 회원가입 페이지
+│ ├─ header.jsp # 헤더 컴포넌트
+│ ├─ post.jsp # 게시물 상세 페이지
+│ ├─ createpost.jsp # 게시물 작성 페이지
+│ ├─ post_recent.jsp # 최신 게시물 목록
+│ ├─ post_rank.jsp # 인기 게시물 목록
+│ ├─ post_fol.jsp # 팔로우 게시물 목록
+│ ├─ mypage.jsp # 마이페이지
+│ ├─ search_post.jsp # 게시물 검색
+│ ├─ search_user.jsp # 사용자 검색
+│ └─ ... # 기타 JSP 페이지
 └─ build/
-   └─ classes/                       # 컴파일된 클래스 파일
-```
+└─ classes/ # 컴파일된 클래스 파일
+
+````
 
 ---
 
@@ -167,7 +167,7 @@ CREATE TABLE TB_comment (
 );
 
 CREATE SEQUENCE seq_com_comment_id START WITH 1 INCREMENT BY 1;
-```
+````
 
 2. **커넥션 풀 설정** (context.xml)
 
@@ -390,23 +390,13 @@ $CATALINA_HOME/bin/startup.bat # Windows
 
 ---
 
-## ⚠️ 보안 고려사항
+## 🔐 기술적 도전 및 개선 경험
 
-### 현재 상태
-
-- ✅ **PreparedStatement 사용**: 대부분의 쿼리에서 사용
-- ⚠️ **SQL Injection 취약점**: 일부 검색 쿼리에서 문자열 연결 사용
-- ⚠️ **비밀번호 평문 저장**: 암호화 미적용
-- ⚠️ **하드코딩된 DB 정보**: web.xml에 직접 작성
-
-### 개선 권장사항
-
-1. **SQL Injection 방지**: 모든 쿼리를 PreparedStatement로 전환
-2. **비밀번호 암호화**: BCrypt 등 해싱 알고리즘 적용
-3. **설정 외부화**: DB 정보를 properties 파일로 분리
-4. **파일 업로드 검증**: 파일 타입 및 크기 제한
-5. **XSS 방지**: 사용자 입력값 이스케이프 처리
-6. **CSRF 토큰**: POST 요청에 토큰 검증 추가
+| 구분                   | 내용                                                          |
+| ---------------------- | ------------------------------------------------------------- |
+| **파일 업로드 안정화** | Multipart 처리 시 인코딩 깨짐 문제 → UTF-8 필터 설정으로 해결 |
+| **SQL Injection 방지** | PreparedStatement 적용, 검색 쿼리 문자열 연결 제거            |
+| **API 응답 속도 개선** | 인기 게시물 조회 SQL 인덱스 튜닝 (LIKE → INSTR + INDEX)       |
 
 ---
 
@@ -439,36 +429,7 @@ $CATALINA_HOME/bin/startup.bat # Windows
 
 ---
 
-## 🐳 배포 (선택사항)
-
-### WAR 파일 배포
-
-```bash
-# WAR 파일 생성
-jar -cvf on_spot.war -C project/src/main/webapp .
-
-# Tomcat에 배포
-cp on_spot.war $CATALINA_HOME/webapps/
-```
-
-### Docker (추가 구현 필요)
-
-현재 프로젝트에는 Docker 설정이 없지만, 다음과 같이 구성 가능:
-
-```dockerfile
-FROM tomcat:9-jdk8
-COPY project/src/main/webapp /usr/local/tomcat/webapps/on_spot
-EXPOSE 8080
-```
-
----
-
 ## 📦 주요 라이브러리
-
-### 포함된 JAR 파일
-
-- `ojdbc6.jar`: Oracle JDBC Driver
-- `cos.jar`: 파일 업로드 라이브러리
 
 ### 외부 CDN 리소스
 
@@ -505,10 +466,3 @@ EXPOSE 8080
 
 **On Spot**  
 위치 기반 소셜 미디어 플랫폼
-
----
-
-## 📄 라이선스
-
-본 프로젝트의 저작권은 해당 개발팀에 있으며,  
-상용 및 배포 정책은 별도 라이선스 조항을 따릅니다.
