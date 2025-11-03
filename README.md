@@ -56,6 +56,7 @@
 [Service Layer - DAO/DTO]
    ↓
 [DB Connection Pool - Oracle]
+```
 
 ---
 
